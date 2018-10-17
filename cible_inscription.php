@@ -11,19 +11,18 @@ catch(Exception $e)
 ?>
 <?php
 
-    if(isset($_POST['nom'], $_POST['prenom'], $_POST['mail'], $_POST['date_naissance'], $_POST['login'], $_POST['password'], $_POST['commentaires'])){
+    if(isset($_POST['nom'], $_POST['prenom'], $_POST['mail'], $_POST['date_naissance'], $_POST['login'], $_POST['password'])){
         $hashedPassword = password_hash($_POST['password'], PASSWORD_ARGON2I);
         var_dump($hashedPassword);
 
 
-        $req = $bdd->prepare('INSERT INTO users(nom, prenom, mail, date_naissance, login, password, commentaires) VALUES(:nom, :prenom, :mail, :date_naissance, :login, :password, :commentaires)');
+        $req = $bdd->prepare('INSERT INTO users(nom, prenom, mail, date_naissance, login, password) VALUES(:nom, :prenom, :mail, :date_naissance, :login, :password)');
         $req->bindParam(':nom',$_POST['nom']);
         $req->bindParam(':prenom', $_POST['prenom']);
         $req->bindParam(':mail', $_POST['mail']);
         $req->bindParam(':date_naissance', $_POST['date_naissance']);
         $req->bindParam(':login', $_POST['login']);
-        $req->bindParam(':password', $hashedPassword);        
-        $req->bindParam(':commentaires', $_POST['commentaires']);
+        $req->bindParam(':password', $hashedPassword);
         $sucess = $req->execute();
         if($sucess === false){
            echo implode(' ',$req->errorInfo());
